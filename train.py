@@ -95,8 +95,8 @@ def main(args):
             image_x, label, UUID = sample_batched["image_x"].cuda(), sample_batched["label"].cuda(), sample_batched["UUID"].cuda()
             # train process
             rand_idx = torch.randperm(image_x.shape[0])
-            fea_x1, cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x[rand_idx, :, :, :])
-            # cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x[rand_idx, :, :, :])
+            # fea_x1, cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x[rand_idx, :, :, :])
+            cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x[rand_idx, :, :, :])
 
             binary_loss = binary_fuc(cls_x1_x1, label[:, 0].long())
 
@@ -105,7 +105,7 @@ def main(args):
             constra_loss = contra_func(fea_x1_x1, fea_x1_x2, contrast_label) * args.lambda_contrast
 
             # fea_x1_ensemble = torch.cat([fea_x1.unsqueeze(1), fea_x1.unsqueeze(1)], dim=1)
-            fea_x1_ensemble = torch.cat([fea_x1.unsqueeze(1), fea_x1_x1.unsqueeze(1)], dim=1)
+            fea_x1_ensemble = torch.cat([fea_x1_x1.unsqueeze(1), fea_x1_x1.unsqueeze(1)], dim=1)
 
             label_supcon = UUID.long() * 10 + label[:, 0].long()
             for l in range(len(label_supcon)):
@@ -183,8 +183,8 @@ def validate(model, test_loader, score_root_path, epoch, name=""):
         scores_list = []
         for i, sample_batched in enumerate(test_loader):
             image_x, label = sample_batched["image_x"].cuda(), sample_batched["label"].cuda()
-            fea_x1, cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x)
-            # cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x)
+            # fea_x1, cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x)
+            cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x)
             score_norm = torch.softmax(cls_x1_x1, dim=1)[:, 1]
             for ii in range(image_x.shape[0]):
                 scores_list.append("{} {}\n".format(score_norm[ii], label[ii][0]))

@@ -93,11 +93,11 @@ class PROPMOD(nn.Module):
         fea_x1_x2 = torch.nn.functional.adaptive_avg_pool2d(fea_x1_x2, 1)
         fea_x1_x2 = fea_x1_x2.reshape(fea_x1_x2.shape[0], -1)
 
-        fea_x1 = x1
-        fea_x1 = self.conv_final(fea_x1)
-        fea_x1 = torch.nn.functional.adaptive_avg_pool2d(fea_x1, 1)
-        fea_x1 = fea_x1.reshape(fea_x1.shape[0], -1)
+        # fea_x1 = x1
+        # fea_x1 = self.conv_final(fea_x1)
+        # fea_x1 = torch.nn.functional.adaptive_avg_pool2d(fea_x1, 1)
+        # fea_x1 = fea_x1.reshape(fea_x1.shape[0], -1)
 
-        return fea_x1, cls_x1_x1, fea_x1_x1, fea_x1_x2
-        # return cls_x1_x1, fea_x1_x1, fea_x1_x2
+        # return fea_x1, cls_x1_x1, fea_x1_x1, fea_x1_x2
+        return cls_x1_x1, fea_x1_x1, fea_x1_x2
 
