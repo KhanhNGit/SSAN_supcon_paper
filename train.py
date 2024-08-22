@@ -90,6 +90,7 @@ def main(args):
         loss_record = AverageMeter()
         # train
         model.train()
+        start_time_train = time.time()
         for i, sample_batched in enumerate(train_loader):
             optimizer.zero_grad()
             image_x, label, UUID = sample_batched["image_x"].cuda(), sample_batched["label"].cuda(), sample_batched["UUID"].cuda()
@@ -132,6 +133,7 @@ def main(args):
 
         # whole epoch average
         print("Epoch:{:d}, Train: lr={:.5f}, Loss={:.4f}".format(epoch + 1, lr, loss_record.avg))
+        print("Epoch:{:d}, Time_consuming: {:.4f}s".format(epoch + 1, time.time()-start_time_train))
 
         # test
         epoch_test = 1
