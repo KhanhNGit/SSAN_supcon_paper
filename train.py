@@ -183,7 +183,8 @@ def validate(model, test_loader, score_root_path, epoch, name=""):
         scores_list = []
         for i, sample_batched in enumerate(test_loader):
             image_x, label = sample_batched["image_x"].cuda(), sample_batched["label"].cuda()
-            fea_x1, cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x)
+            # fea_x1, cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x)
+            cls_x1_x1, fea_x1_x1, fea_x1_x2 = model(image_x, image_x)
             score_norm = torch.softmax(cls_x1_x1, dim=1)[:, 1]
             for ii in range(image_x.shape[0]):
                 scores_list.append("{} {}\n".format(score_norm[ii], label[ii][0]))
